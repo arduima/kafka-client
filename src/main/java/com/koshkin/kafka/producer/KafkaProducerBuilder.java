@@ -37,6 +37,7 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> valueSerializer(Serializer<V> valueSerializer);
         OptionalConfiguration<K, V> valueSerializer(KafkaSerializers serializerEnum);
         OptionalConfiguration<K, V> acknowledgements(String acknowledgements);
+        OptionalConfiguration<K, V> acknowledgements(Acknowledgements acknowledgementsEnum);
         OptionalConfiguration<K, V> retries(Integer retries);
         OptionalConfiguration<K, V> batchSize(Integer batchedMessages);
         OptionalConfiguration<K, V> linger(Integer milliseconds);
@@ -139,6 +140,12 @@ public class KafkaProducerBuilder<K, V> {
         @Override
         public OptionalConfiguration<K, V> acknowledgements(String acknowledgements) {
             this.acknowledgements = acknowledgements;
+            return this;
+        }
+
+        @Override
+        public OptionalConfiguration<K, V> acknowledgements(Acknowledgements acknowledgementsEnum) {
+            this.acknowledgements = Acknowledgements.getString(acknowledgementsEnum);
             return this;
         }
 

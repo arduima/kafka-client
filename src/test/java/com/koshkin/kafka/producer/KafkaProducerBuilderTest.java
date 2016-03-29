@@ -46,5 +46,11 @@ public class KafkaProducerBuilderTest {
                     .and()
                 .build();
         assertNotNull(producer3);
+
+        Producer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newBuilder()
+                .servers(SERVERS)
+                .acknowledgements(Acknowledgements.ALL)
+                .build();
+        assertNotNull(producer4);
     }
 }
