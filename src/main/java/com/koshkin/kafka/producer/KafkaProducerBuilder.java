@@ -74,7 +74,7 @@ public class KafkaProducerBuilder<K, V> {
         private Integer lingerMilliseconds;
         private Integer bufferBytes;
 
-        private ProducerConfiguration(){};
+        private ProducerConfiguration(){}
 
         private List<CustomOption> customConfigurationList;
 
