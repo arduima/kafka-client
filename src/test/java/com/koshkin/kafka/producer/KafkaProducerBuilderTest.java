@@ -14,16 +14,17 @@ import static org.junit.Assert.*;
  */
 public class KafkaProducerBuilderTest {
 
-    public static final String SERVERS = "192.168.99.100:32769";
+    //public static final String SERVERS = "192.168.99.100:32769";
+    public static final String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
 
     @Test
     public void newBuilder() throws Exception {
-        Producer<String, String> producer1 = new KafkaProducerBuilder<String, String>().newBuilder()
+        Producer<String, String> producer1 = new KafkaProducerBuilder<String, String>().newProducer()
                 .servers(SERVERS)
                 .build();
         assertNotNull(producer1);
 
-        Producer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newBuilder()
+        Producer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
                 .keySerializer(new StringSerializer())
                 .valueSerializer(new ByteArraySerializer())
@@ -31,7 +32,7 @@ public class KafkaProducerBuilderTest {
         assertNotNull(producer2);
 
         // Key & Value Serializers can be any Serializable object or byte[]
-        Producer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newBuilder()
+        Producer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newProducer()
                 .servers(SERVERS)
                 .acknowledgements("all")
                 .batchSize(16384)
@@ -47,10 +48,11 @@ public class KafkaProducerBuilderTest {
                 .build();
         assertNotNull(producer3);
 
-        Producer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newBuilder()
+        Producer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
                 .acknowledgements(Acknowledgements.ALL)
                 .build();
         assertNotNull(producer4);
+
     }
 }

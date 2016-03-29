@@ -23,7 +23,7 @@ import java.util.Properties;
 public class KafkaProducerBuilder<K, V> {
     public KafkaProducerBuilder(){}
 
-    public ServerConfiguration<K, V> newBuilder() {
+    public ServerConfiguration<K, V> newProducer() {
         return new ProducerConfiguration<K, V>();
     }
 
@@ -55,7 +55,7 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> and();
     }
 
-    public static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>{
+    private static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>{
 
         private final static String ILLEGAL_STATE_EXCEPTION_MESSAGE_SERVER = "Servers cannot be empty";
         private final static String SERVERS = "bootstrap.servers";
@@ -74,7 +74,7 @@ public class KafkaProducerBuilder<K, V> {
         private Integer lingerMilliseconds;
         private Integer bufferBytes;
 
-
+        private ProducerConfiguration(){};
 
         private List<CustomOption> customConfigurationList;
 
