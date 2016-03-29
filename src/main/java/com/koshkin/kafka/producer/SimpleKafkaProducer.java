@@ -15,5 +15,5 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> {
     SimpleKafkaProducer(Properties properties, Serializer<K> keySerializer, Serializer<V> valueSerializer) {
         super(properties, keySerializer, valueSerializer);
     }
-    
+
 }
