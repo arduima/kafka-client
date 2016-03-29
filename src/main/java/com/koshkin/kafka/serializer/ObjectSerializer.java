@@ -18,7 +18,7 @@ public class ObjectSerializer<T> implements Serializer<T>, Deserializer<T> {
 
     public byte[] serialize(String topic, T data) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = null;
+        ObjectOutputStream os;
         try {
             os = new ObjectOutputStream(out);
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class ObjectSerializer<T> implements Serializer<T>, Deserializer<T> {
 
     public T deserialize(String topic, byte[] data) {
         ByteArrayInputStream in = new ByteArrayInputStream(data);
-        ObjectInputStream is = null;
+        ObjectInputStream is;
         try {
             is = new ObjectInputStream(in);
         } catch (IOException e) {
