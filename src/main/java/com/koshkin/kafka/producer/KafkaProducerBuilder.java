@@ -2,11 +2,14 @@ package com.koshkin.kafka.producer;
 
 import com.koshkin.kafka.serializer.KafkaSerializers;
 import com.koshkin.kafka.serializer.ObjectSerializer;
+import com.koshkin.kafka.utilities.CustomOption;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -35,18 +38,23 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> valueSerializer(KafkaSerializers serializerEnum);
         OptionalConfiguration<K, V> acknowledgements(String acknowledgements);
         OptionalConfiguration<K, V> retries(Integer retries);
-        OptionalConfiguration<K, V> batchSize(Long batchedMessages);
+        OptionalConfiguration<K, V> batchSize(Integer batchedMessages);
         OptionalConfiguration<K, V> linger(Integer milliseconds);
-        OptionalConfiguration<K, V> buffer(Long bytes);
+        OptionalConfiguration<K, V> buffer(Integer bytes);
+
+        CustomConfiguration<K, V> custom();
 
         Producer<K, V> build();
     }
 
-    public interface BuildConfiguration<K, V> {
-        Producer<K, V> build();
+    public interface CustomConfiguration<K, V> {
+        CustomConfiguration<K, V> option(String key, Object value);
+
+        /*Keyword to go back*/
+        OptionalConfiguration<K, V> and();
     }
 
-    public static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>{
+    public static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>{
 
         private final static String ILLEGAL_STATE_EXCEPTION_MESSAGE_SERVER = "Servers cannot be empty";
         private final static String SERVERS = "bootstrap.servers";
@@ -61,9 +69,13 @@ public class KafkaProducerBuilder<K, V> {
         private Serializer<V> valueSerializer;
         private String acknowledgements;
         private Integer retries;
-        private Long batchedMessages;
+        private Integer batchedMessages;
         private Integer lingerMilliseconds;
-        private Long bufferBytes;
+        private Integer bufferBytes;
+
+
+
+        private List<CustomOption> customConfigurationList;
 
         /* Start Required Parameters */
 
@@ -105,6 +117,7 @@ public class KafkaProducerBuilder<K, V> {
             return this;
         }
 
+        // TODO give IDE hints on valid generic values and serializers
         @Override
         public OptionalConfiguration<K, V> valueSerializer(KafkaSerializers serializerEnum) {
             Serializer<V> serializer = null;
@@ -136,7 +149,7 @@ public class KafkaProducerBuilder<K, V> {
         }
 
         @Override
-        public OptionalConfiguration<K, V> batchSize(Long batchedMessages) {
+        public OptionalConfiguration<K, V> batchSize(Integer batchedMessages) {
             this.batchedMessages = batchedMessages;
             return this;
         }
@@ -148,8 +161,28 @@ public class KafkaProducerBuilder<K, V> {
         }
 
         @Override
-        public OptionalConfiguration<K, V> buffer(Long bytes) {
+        public OptionalConfiguration<K, V> buffer(Integer bytes) {
             this.bufferBytes = bytes;
+            return this;
+        }
+
+        /*Pass in any key value pair*/
+        @Override
+        public CustomConfiguration<K, V> custom() {
+            return this;
+        }
+
+        @Override
+        public CustomConfiguration<K, V> option(String key, Object value) {
+            if(customConfigurationList == null) {
+                customConfigurationList = new ArrayList<>();
+            }
+            customConfigurationList.add(new CustomOption(key, value));
+            return this;
+        }
+
+        @Override
+        public OptionalConfiguration<K, V> and() {
             return this;
         }
 
@@ -164,20 +197,26 @@ public class KafkaProducerBuilder<K, V> {
 
             properties.setProperty(SERVERS, servers);
 
-            if(servers != null) {
+            if(acknowledgements != null) {
                 properties.put(ACKNOWLEDGEMENTS, acknowledgements);
             }
-            if(servers != null) {
+            if(retries != null) {
                 properties.put(RETRIES, retries);
             }
-            if(servers != null) {
+            if(batchedMessages != null) {
                 properties.put(BATCHED_MESSAGES, batchedMessages);
             }
-            if(servers != null) {
+            if(lingerMilliseconds != null) {
                 properties.put(LINGER_MILLISECONDS, lingerMilliseconds);
             }
-            if(servers != null) {
+            if(bufferBytes != null) {
                 properties.put(BUFFER_BYTES, bufferBytes);
+            }
+
+            if(customConfigurationList != null) {
+                for(CustomOption option : customConfigurationList) {
+                    properties.put(option.getKey(), option.getValue());
+                }
             }
 
             if(keySerializer == null) {
