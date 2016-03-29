@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.Map;
 
 /**
- * Created by dkoshkin on 3/25/16.
+ * Created by dkoshkin
  */
 public class ObjectSerializer<T> implements Serializer<T>, Deserializer<T> {
 

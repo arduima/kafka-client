@@ -1,7 +1,7 @@
 package com.koshkin.kafka.serializer;
 
 /**
- * Created by dkoshkin on 3/26/16.
+ * Created by dkoshkin
  */
 public enum KafkaSerializers {
     STRING, BYTEARRAY, OBJECT;
