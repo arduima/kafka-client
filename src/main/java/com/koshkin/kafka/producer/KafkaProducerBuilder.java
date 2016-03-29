@@ -35,7 +35,7 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> valueSerializer(KafkaSerializers serializerEnum);
         OptionalConfiguration<K, V> acknowledgements(String acknowledgements);
         OptionalConfiguration<K, V> retries(Integer retries);
-        OptionalConfiguration<K, V> batchSize(Long messages);
+        OptionalConfiguration<K, V> batchSize(Long batchedMessages);
         OptionalConfiguration<K, V> linger(Integer milliseconds);
         OptionalConfiguration<K, V> buffer(Long bytes);
 
@@ -48,12 +48,20 @@ public class KafkaProducerBuilder<K, V> {
 
     public static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>{
 
+        private final static String ILLEGAL_STATE_EXCEPTION_MESSAGE_SERVER = "Servers cannot be empty";
+        private final static String SERVERS = "bootstrap.servers";
+        private final static String ACKNOWLEDGEMENTS = "acknowledgements";
+        private final static String RETRIES = "retries";
+        private final static String BATCHED_MESSAGES = "batch.size";
+        private final static String LINGER_MILLISECONDS = "linger.ms";
+        private final static String BUFFER_BYTES =  "buffer.memory";
+
         private String servers;
         private Serializer<K> keySerializer;
         private Serializer<V> valueSerializer;
         private String acknowledgements;
         private Integer retries;
-        private Long messages;
+        private Long batchedMessages;
         private Integer lingerMilliseconds;
         private Long bufferBytes;
 
@@ -128,8 +136,8 @@ public class KafkaProducerBuilder<K, V> {
         }
 
         @Override
-        public OptionalConfiguration<K, V> batchSize(Long messages) {
-            this.messages = messages;
+        public OptionalConfiguration<K, V> batchSize(Long batchedMessages) {
+            this.batchedMessages = batchedMessages;
             return this;
         }
 
@@ -148,7 +156,29 @@ public class KafkaProducerBuilder<K, V> {
         @Override
         public Producer<K, V> build() {
             Properties properties = new Properties();
-            properties.setProperty("bootstrap.servers", servers);
+
+            /*Validation*/
+            if(servers == null) {
+                throw new IllegalStateException(ILLEGAL_STATE_EXCEPTION_MESSAGE_SERVER);
+            }
+
+            properties.setProperty(SERVERS, servers);
+
+            if(servers != null) {
+                properties.put(ACKNOWLEDGEMENTS, acknowledgements);
+            }
+            if(servers != null) {
+                properties.put(RETRIES, retries);
+            }
+            if(servers != null) {
+                properties.put(BATCHED_MESSAGES, batchedMessages);
+            }
+            if(servers != null) {
+                properties.put(LINGER_MILLISECONDS, lingerMilliseconds);
+            }
+            if(servers != null) {
+                properties.put(BUFFER_BYTES, bufferBytes);
+            }
 
             if(keySerializer == null) {
                 keySerializer = (Serializer<K>) new StringSerializer();
