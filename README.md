@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Kafka Client
 ###TL;DR
 ```JAVA
@@ -70,9 +69,3 @@ The library provives 3 Serializer types:
 You can also provide your own serializer by implementing `org.apache.kafka.common.serialization.Serializer<T>` and `org.apache.kafka.common.serialization.Deserializer<T>`. See `ObjectSerializer.java` implementation for an example.
 
 `new Producer<K, V>` and `new ProducerRecord<K, V>` must be compatible with the serializers specified.
-
-
-=======
-# kafka-wrapper
-Library to provide wrapper APIs for Kafka's Producer/Consumer layer
->>>>>>> 1bdbe5699fabaeb621be7ed2108a122f65da70eb
