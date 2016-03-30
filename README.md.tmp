@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Kafka Client
 ###TL;DR
 ```JAVA
@@ -71,3 +72,7 @@ You can also provide your own serializer by implementing `org.apache.kafka.commo
 `new Producer<K, V>` and `new ProducerRecord<K, V>` must be compatible with the serializers specified.
 
 
+=======
+# kafka-wrapper
+Library to provide wrapper APIs for Kafka's Producer/Consumer layer
+>>>>>>> 1bdbe5699fabaeb621be7ed2108a122f65da70eb
