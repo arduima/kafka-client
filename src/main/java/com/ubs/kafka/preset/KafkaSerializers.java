@@ -1,4 +1,4 @@
-package com.ubs.kafka.serializer;
+package com.ubs.kafka.preset;
 
 /**
  * Created by dkoshkin

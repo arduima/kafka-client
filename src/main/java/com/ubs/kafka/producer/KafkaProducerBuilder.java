@@ -2,9 +2,10 @@ package com.ubs.kafka.producer;
 
 import com.ubs.kafka.exception.ExceptionMessages;
 import com.ubs.kafka.exception.PropertiesException;
-import com.ubs.kafka.serializer.KafkaSerializers;
+import com.ubs.kafka.preset.KafkaSerializers;
 import com.ubs.kafka.serializer.ObjectSerializer;
 import com.ubs.kafka.utility.CustomOption;
+import com.ubs.kafka.preset.KafkaServers;
 import com.ubs.kafka.utility.PropertiesUtility;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -36,6 +37,7 @@ public class KafkaProducerBuilder<K, V> {
 
     public interface ServerConfiguration<K, V> {
         OptionalConfiguration<K, V> servers(String servers);
+        OptionalConfiguration<K, V> servers(KafkaServers serversEnum);
     }
 
     public interface OptionalConfiguration<K, V> extends Build<K, V>, SerializerConfiguration<K, V> {
@@ -99,6 +101,13 @@ public class KafkaProducerBuilder<K, V> {
         @Override
         public OptionalConfiguration<K, V> servers(String servers) {
             this.servers = servers;
+            return this;
+        }
+
+        @Override
+        public OptionalConfiguration<K, V> servers(KafkaServers serversEnum) {
+            // TODO need to call an SP/Service to get server urls
+            this.servers = "";
             return this;
         }
 
