@@ -30,7 +30,7 @@ public class KafkaProducerBuilder<K, V> {
         return new ProducerConfiguration<>();
     }
 
-    public SimpleProducer<K, V> newProducerFromFile(String path) throws NullPointerException, PropertiesException {
+    public SimpleProducer<K, V> newProducerFromFile(String path) {
         return new ProducerConfiguration<K, V>().build(path);
     }
 
@@ -68,7 +68,7 @@ public class KafkaProducerBuilder<K, V> {
     }
 
     private interface BuildFromFile<K, V> {
-        SimpleProducer<K, V> build(String path) throws IOException;
+        SimpleProducer<K, V> build(String path);
     }
 
     private static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>, BuildFromFile<K, V>{
@@ -253,7 +253,7 @@ public class KafkaProducerBuilder<K, V> {
         }
 
         @Override
-        public SimpleProducer<K, V> build(String path) throws NullPointerException, PropertiesException {
+        public SimpleProducer<K, V> build(String path) {
             if(path == null) {
                 throw new NullPointerException(ExceptionMessages.PROPERTIES_PATH_NULL);
             }
@@ -266,6 +266,7 @@ public class KafkaProducerBuilder<K, V> {
 
             return new SimpleKafkaProducer<>(properties);
         }
+
     }
 
 }
