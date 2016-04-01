@@ -1,4 +1,4 @@
-package com.koshkin.kafka.utilities;
+package com.koshkin.kafka.utility;
 
 /**
  * Created by dkoshkin on 3/28/16.

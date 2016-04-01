@@ -2,7 +2,7 @@ package com.koshkin.kafka.producer;
 
 import com.koshkin.kafka.serializer.KafkaSerializers;
 import com.koshkin.kafka.serializer.ObjectSerializer;
-import com.koshkin.kafka.utilities.CustomOption;
+import com.koshkin.kafka.utility.CustomOption;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
