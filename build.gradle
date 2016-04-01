@@ -1,4 +1,4 @@
-group 'com.koshkin.kafka'
+group 'com.ubs.kafka'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'

@@ -1,4 +1,4 @@
-package com.koshkin.kafka.exception;
+package com.ubs.kafka.exception;
 
 /**
  * Created by de08300 on 4/1/2016.

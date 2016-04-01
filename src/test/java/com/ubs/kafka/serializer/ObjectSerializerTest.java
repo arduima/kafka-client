@@ -1,8 +1,7 @@
-package com.koshkin.kafka.serializer;
+package com.ubs.kafka.serializer;
 
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

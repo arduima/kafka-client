@@ -1,4 +1,4 @@
-package com.koshkin.kafka.producer;
+package com.ubs.kafka.producer;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;

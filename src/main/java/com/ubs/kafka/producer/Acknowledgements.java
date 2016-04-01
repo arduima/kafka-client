@@ -1,4 +1,4 @@
-package com.koshkin.kafka.producer;
+package com.ubs.kafka.producer;
 
 /**
  * Created by dkoshkin on 3/28/16.

@@ -1,7 +1,7 @@
-package com.koshkin.kafka.producer;
+package com.ubs.kafka.producer;
 
-import com.koshkin.kafka.exception.PropertiesException;
-import com.koshkin.kafka.serializer.KafkaSerializers;
+import com.ubs.kafka.exception.PropertiesException;
+import com.ubs.kafka.serializer.KafkaSerializers;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.koshkin.kafka.serializer;
+package com.ubs.kafka.serializer;
 
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;

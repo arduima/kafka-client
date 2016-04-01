@@ -1,4 +1,4 @@
-package com.koshkin.kafka.serializer;
+package com.ubs.kafka.serializer;
 
 /**
  * Created by dkoshkin

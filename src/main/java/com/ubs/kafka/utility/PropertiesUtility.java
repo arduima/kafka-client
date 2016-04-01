@@ -1,4 +1,4 @@
-package com.koshkin.kafka.utility;
+package com.ubs.kafka.utility;
 
 import java.io.FileInputStream;
 import java.io.IOException;

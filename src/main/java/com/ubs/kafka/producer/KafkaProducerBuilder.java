@@ -1,11 +1,11 @@
-package com.koshkin.kafka.producer;
+package com.ubs.kafka.producer;
 
-import com.koshkin.kafka.exception.ExceptionMessages;
-import com.koshkin.kafka.exception.PropertiesException;
-import com.koshkin.kafka.serializer.KafkaSerializers;
-import com.koshkin.kafka.serializer.ObjectSerializer;
-import com.koshkin.kafka.utility.CustomOption;
-import com.koshkin.kafka.utility.PropertiesUtility;
+import com.ubs.kafka.exception.ExceptionMessages;
+import com.ubs.kafka.exception.PropertiesException;
+import com.ubs.kafka.serializer.KafkaSerializers;
+import com.ubs.kafka.serializer.ObjectSerializer;
+import com.ubs.kafka.utility.CustomOption;
+import com.ubs.kafka.utility.PropertiesUtility;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
