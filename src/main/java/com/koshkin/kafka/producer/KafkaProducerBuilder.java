@@ -1,12 +1,16 @@
 package com.koshkin.kafka.producer;
 
+import com.koshkin.kafka.exception.ExceptionMessages;
+import com.koshkin.kafka.exception.PropertiesException;
 import com.koshkin.kafka.serializer.KafkaSerializers;
 import com.koshkin.kafka.serializer.ObjectSerializer;
 import com.koshkin.kafka.utility.CustomOption;
+import com.koshkin.kafka.utility.PropertiesUtility;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -26,13 +30,15 @@ public class KafkaProducerBuilder<K, V> {
         return new ProducerConfiguration<>();
     }
 
+    public SimpleProducer<K, V> newProducerFromFile(String path) throws NullPointerException, PropertiesException {
+        return new ProducerConfiguration<K, V>().build(path);
+    }
+
     public interface ServerConfiguration<K, V> {
         OptionalConfiguration<K, V> servers(String servers);
     }
 
-    public interface OptionalConfiguration<K, V> {
-        OptionalConfiguration<K, V> keySerializer(Serializer<K> keySerializer);
-        OptionalConfiguration<K, V> keySerializer(KafkaSerializers serializerEnum);
+    public interface OptionalConfiguration<K, V> extends Build<K, V>, SerializerConfiguration<K, V> {
         OptionalConfiguration<K, V> valueSerializer(Serializer<V> valueSerializer);
         OptionalConfiguration<K, V> valueSerializer(KafkaSerializers serializerEnum);
         OptionalConfiguration<K, V> acknowledgements(String acknowledgements);
@@ -43,8 +49,11 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> buffer(Integer bytes);
 
         CustomConfiguration<K, V> custom();
+    }
 
-        SimpleProducer<K, V> build();
+    public interface SerializerConfiguration<K, V> {
+        OptionalConfiguration<K, V> keySerializer(Serializer<K> keySerializer);
+        OptionalConfiguration<K, V> keySerializer(KafkaSerializers serializerEnum);
     }
 
     public interface CustomConfiguration<K, V> {
@@ -54,7 +63,15 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> and();
     }
 
-    private static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>{
+    private interface Build<K, V> {
+        SimpleProducer<K, V> build();
+    }
+
+    private interface BuildFromFile<K, V> {
+        SimpleProducer<K, V> build(String path) throws IOException;
+    }
+
+    private static class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>, BuildFromFile<K, V>{
 
         private final static String ILLEGAL_STATE_EXCEPTION_MESSAGE_SERVER = "Servers cannot be empty";
         private final static String SERVERS = "bootstrap.servers";
@@ -233,6 +250,21 @@ public class KafkaProducerBuilder<K, V> {
             }
 
             return new SimpleKafkaProducer<>(properties, keySerializer, valueSerializer);
+        }
+
+        @Override
+        public SimpleProducer<K, V> build(String path) throws NullPointerException, PropertiesException {
+            if(path == null) {
+                throw new NullPointerException(ExceptionMessages.PROPERTIES_PATH_NULL);
+            }
+            Properties properties;
+            try {
+                properties = PropertiesUtility.readPropertyFile(path);
+            } catch (IOException e) {
+                throw new PropertiesException(e);
+            }
+
+            return new SimpleKafkaProducer<>(properties);
         }
     }
 

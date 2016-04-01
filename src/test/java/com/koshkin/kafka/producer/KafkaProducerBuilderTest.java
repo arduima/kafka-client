@@ -1,5 +1,6 @@
 package com.koshkin.kafka.producer;
 
+import com.koshkin.kafka.exception.PropertiesException;
 import com.koshkin.kafka.serializer.KafkaSerializers;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -13,7 +14,7 @@ import static org.junit.Assert.*;
 public class KafkaProducerBuilderTest {
 
     //public static final String SERVERS = "192.168.99.100:32769";
-    public static final String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
+    private final static String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
 
     @Test
     public void newBuilder() throws Exception {
@@ -53,4 +54,16 @@ public class KafkaProducerBuilderTest {
         assertNotNull(producer4);
 
     }
+
+    @Test(expected = NullPointerException.class)
+    public void newBuilderFromFileNullPointerException() {
+        SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducerFromFile(null);
+    }
+
+    @Test(expected = PropertiesException.class)
+    public void newBuilderFromFilePropertiesException() {
+        SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducerFromFile("/incorrect/path/to/kafka.properties");
+    }
+
+    // TODO test happy-path for newBuilderFromFile
 }

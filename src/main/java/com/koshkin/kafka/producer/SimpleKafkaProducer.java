@@ -20,6 +20,10 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
         super(properties, keySerializer, valueSerializer);
     }
 
+    public SimpleKafkaProducer(Properties properties) {
+        super(properties);
+    }
+
     @Override
     public Future<RecordMetadata> send(String topic, Integer partition, K key, V value) {
         return super.send(new ProducerRecord<>(topic, partition, key, value));

@@ -8,26 +8,20 @@ import java.util.Properties;
 /**
  * Created by de08300 on 4/1/2016.
  */
-public class PropertyUtility {
+public final class PropertiesUtility {
 
-    private PropertyUtility(){};
+    private PropertiesUtility(){}
 
-    public Properties readPropertyFile(String path) {
+    public static Properties readPropertyFile(String path) throws IOException {
         Properties prop = new Properties();
         InputStream input = null;
         try {
             input = new FileInputStream(path);
             // load a properties file
             prop.load(input);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
+        }  finally {
             if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                input.close();
             }
         }
 
