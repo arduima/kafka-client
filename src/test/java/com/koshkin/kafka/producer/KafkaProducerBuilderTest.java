@@ -1,8 +1,6 @@
 package com.koshkin.kafka.producer;
 
 import com.koshkin.kafka.serializer.KafkaSerializers;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;
@@ -19,12 +17,12 @@ public class KafkaProducerBuilderTest {
 
     @Test
     public void newBuilder() throws Exception {
-        Producer<String, String> producer1 = new KafkaProducerBuilder<String, String>().newProducer()
+        SimpleProducer<String, String> producer1 = new KafkaProducerBuilder<String, String>().newProducer()
                 .servers(SERVERS)
                 .build();
         assertNotNull(producer1);
 
-        Producer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newProducer()
+        SimpleProducer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
                 .keySerializer(new StringSerializer())
                 .valueSerializer(new ByteArraySerializer())
@@ -32,7 +30,7 @@ public class KafkaProducerBuilderTest {
         assertNotNull(producer2);
 
         // Key & Value Serializers can be any Serializable object or byte[]
-        Producer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newProducer()
+        SimpleProducer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newProducer()
                 .servers(SERVERS)
                 .acknowledgements("all")
                 .batchSize(16384)
@@ -48,7 +46,7 @@ public class KafkaProducerBuilderTest {
                 .build();
         assertNotNull(producer3);
 
-        Producer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newProducer()
+        SimpleProducer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
                 .acknowledgements(Acknowledgements.ALL)
                 .build();

@@ -3,7 +3,6 @@ package com.koshkin.kafka.producer;
 import com.koshkin.kafka.serializer.KafkaSerializers;
 import com.koshkin.kafka.serializer.ObjectSerializer;
 import com.koshkin.kafka.utilities.CustomOption;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -24,7 +23,7 @@ public class KafkaProducerBuilder<K, V> {
     public KafkaProducerBuilder(){}
 
     public ServerConfiguration<K, V> newProducer() {
-        return new ProducerConfiguration<K, V>();
+        return new ProducerConfiguration<>();
     }
 
     public interface ServerConfiguration<K, V> {
@@ -45,7 +44,7 @@ public class KafkaProducerBuilder<K, V> {
 
         CustomConfiguration<K, V> custom();
 
-        Producer<K, V> build();
+        SimpleProducer<K, V> build();
     }
 
     public interface CustomConfiguration<K, V> {
@@ -111,7 +110,7 @@ public class KafkaProducerBuilder<K, V> {
                     serializer = (Serializer<K>) new ByteArraySerializer();
                     break;
                 case OBJECT:
-                    serializer = new ObjectSerializer<K>();
+                    serializer = new ObjectSerializer<>();
                     break;
             }
             this.keySerializer = serializer;
@@ -130,7 +129,7 @@ public class KafkaProducerBuilder<K, V> {
                     serializer = (Serializer<V>) new ByteArraySerializer();
                     break;
                 case OBJECT:
-                    serializer = new ObjectSerializer<V>();
+                    serializer = new ObjectSerializer<>();
                     break;
             }
             this.valueSerializer = serializer;
@@ -194,7 +193,7 @@ public class KafkaProducerBuilder<K, V> {
         }
 
         @Override
-        public Producer<K, V> build() {
+        public SimpleProducer<K, V> build() {
             Properties properties = new Properties();
 
             /*Validation*/
@@ -233,7 +232,7 @@ public class KafkaProducerBuilder<K, V> {
                 valueSerializer = (Serializer<V>) new StringSerializer();
             }
 
-            return new SimpleKafkaProducer<K, V>(properties, keySerializer, valueSerializer);
+            return new SimpleKafkaProducer<>(properties, keySerializer, valueSerializer);
         }
     }
 
