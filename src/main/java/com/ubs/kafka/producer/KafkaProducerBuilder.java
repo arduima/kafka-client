@@ -2,6 +2,7 @@ package com.ubs.kafka.producer;
 
 import com.ubs.kafka.exception.ExceptionMessages;
 import com.ubs.kafka.exception.PropertiesException;
+import com.ubs.kafka.preset.KafkaAcknowledgements;
 import com.ubs.kafka.preset.KafkaSerializers;
 import com.ubs.kafka.serializer.ObjectSerializer;
 import com.ubs.kafka.utility.CustomOption;
@@ -44,7 +45,7 @@ public class KafkaProducerBuilder<K, V> {
         OptionalConfiguration<K, V> valueSerializer(Serializer<V> valueSerializer);
         OptionalConfiguration<K, V> valueSerializer(KafkaSerializers serializerEnum);
         OptionalConfiguration<K, V> acknowledgements(String acknowledgements);
-        OptionalConfiguration<K, V> acknowledgements(Acknowledgements acknowledgementsEnum);
+        OptionalConfiguration<K, V> acknowledgements(KafkaAcknowledgements acknowledgementsEnum);
         OptionalConfiguration<K, V> retries(Integer retries);
         OptionalConfiguration<K, V> batchSize(Integer batchedMessages);
         OptionalConfiguration<K, V> linger(Integer milliseconds);
@@ -169,8 +170,8 @@ public class KafkaProducerBuilder<K, V> {
         }
 
         @Override
-        public OptionalConfiguration<K, V> acknowledgements(Acknowledgements acknowledgementsEnum) {
-            this.acknowledgements = Acknowledgements.getString(acknowledgementsEnum);
+        public OptionalConfiguration<K, V> acknowledgements(KafkaAcknowledgements acknowledgementsEnum) {
+            this.acknowledgements = KafkaAcknowledgements.getString(acknowledgementsEnum);
             return this;
         }
 

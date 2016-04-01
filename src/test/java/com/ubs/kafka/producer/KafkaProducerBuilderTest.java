@@ -1,6 +1,7 @@
 package com.ubs.kafka.producer;
 
 import com.ubs.kafka.exception.PropertiesException;
+import com.ubs.kafka.preset.KafkaAcknowledgements;
 import com.ubs.kafka.preset.KafkaSerializers;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -49,7 +50,7 @@ public class KafkaProducerBuilderTest {
 
         SimpleProducer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
-                .acknowledgements(Acknowledgements.ALL)
+                .acknowledgements(KafkaAcknowledgements.ALL)
                 .build();
         assertNotNull(producer4);
 
