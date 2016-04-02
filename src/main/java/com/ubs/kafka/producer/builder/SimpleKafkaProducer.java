@@ -1,5 +1,6 @@
-package com.ubs.kafka.producer;
+package com.ubs.kafka.producer.builder;
 
+import com.ubs.kafka.producer.SimpleProducer;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,7 +21,7 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
         super(properties, keySerializer, valueSerializer);
     }
 
-    public SimpleKafkaProducer(Properties properties) {
+    SimpleKafkaProducer(Properties properties) {
         super(properties);
     }
 
