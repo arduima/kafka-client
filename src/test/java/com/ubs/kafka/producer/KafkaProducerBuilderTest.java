@@ -37,7 +37,7 @@ public class KafkaProducerBuilderTest {
                 .servers(SERVERS)
                 .acknowledgements("all")
                 .batchSize(16384)
-                .buffer(1024)
+                .bufferMemory(1024)
                 .linger(1)
                 .retries(0)
                 .keySerializer(KafkaSerializers.STRING)
