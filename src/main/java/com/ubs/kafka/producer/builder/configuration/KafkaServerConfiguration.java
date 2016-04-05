@@ -1,6 +1,6 @@
 package com.ubs.kafka.producer.builder.configuration;
 
-import com.ubs.kafka.preset.KafkaServers;
+import com.ubs.kafka.configenum.KafkaServers;
 
 /**
  * Created by dkoshkin on 4/2/16.

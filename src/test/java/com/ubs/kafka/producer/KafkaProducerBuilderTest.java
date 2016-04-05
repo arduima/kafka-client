@@ -1,8 +1,8 @@
 package com.ubs.kafka.producer;
 
 import com.ubs.kafka.exception.PropertiesException;
-import com.ubs.kafka.preset.KafkaAcknowledgements;
-import com.ubs.kafka.preset.KafkaSerializers;
+import com.ubs.kafka.configenum.KafkaAcknowledgements;
+import com.ubs.kafka.configenum.KafkaSerializers;
 import com.ubs.kafka.producer.builder.KafkaProducerBuilder;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;

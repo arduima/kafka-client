@@ -1,6 +1,6 @@
 package com.ubs.kafka.producer.builder.configuration;
 
-import com.ubs.kafka.preset.KafkaSerializers;
+import com.ubs.kafka.configenum.KafkaSerializers;
 import org.apache.kafka.common.serialization.Serializer;
 
 /**

@@ -1,4 +1,4 @@
-package com.ubs.kafka.preset;
+package com.ubs.kafka.configenum;
 
 /**
  * Created by dkoshkin on 4/4/16.

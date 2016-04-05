@@ -2,10 +2,10 @@ package com.ubs.kafka.producer.builder;
 
 import com.ubs.kafka.exception.ExceptionMessages;
 import com.ubs.kafka.exception.PropertiesException;
-import com.ubs.kafka.preset.KafkaAcknowledgements;
-import com.ubs.kafka.preset.KafkaSerializers;
-import com.ubs.kafka.preset.KafkaServers;
-import com.ubs.kafka.preset.ZookeeperServers;
+import com.ubs.kafka.configenum.KafkaAcknowledgements;
+import com.ubs.kafka.configenum.KafkaSerializers;
+import com.ubs.kafka.configenum.KafkaServers;
+import com.ubs.kafka.configenum.ZookeeperServers;
 import com.ubs.kafka.producer.SimpleProducer;
 import com.ubs.kafka.producer.builder.configuration.*;
 import com.ubs.kafka.serializer.ObjectSerializer;

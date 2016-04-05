@@ -1,6 +1,6 @@
 package com.ubs.kafka.producer.builder.configuration;
 
-import com.ubs.kafka.preset.KafkaAcknowledgements;
+import com.ubs.kafka.configenum.KafkaAcknowledgements;
 import org.apache.kafka.clients.producer.Partitioner;
 
 /**
