@@ -1,4 +1,4 @@
-package com.ubs.kafka.utility;
+package com.ubs.kafka.producer.builder.configuration;
 
 /**
  * Created by dkoshkin on 3/28/16.

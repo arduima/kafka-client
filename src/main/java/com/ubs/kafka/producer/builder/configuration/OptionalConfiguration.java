@@ -1,14 +1,12 @@
 package com.ubs.kafka.producer.builder.configuration;
 
 import com.ubs.kafka.preset.KafkaAcknowledgements;
-import com.ubs.kafka.preset.KafkaSerializers;
 import org.apache.kafka.clients.producer.Partitioner;
-import org.apache.kafka.common.serialization.Serializer;
 
 /**
  * Created by dkoshkin on 4/2/16.
  */
-public interface OptionalConfiguration<K, V> extends SerializerConfiguration<K, V>, Build<K, V>, BuildFromFile<K, V> {
+public interface OptionalConfiguration<K, V> extends SerializerConfiguration<K, V>, ZookeeperConfiguration<K, V>, Build<K, V>, BuildFromFile<K, V> {
 
     OptionalConfiguration<K, V> partitioner(Partitioner partitioner);
 

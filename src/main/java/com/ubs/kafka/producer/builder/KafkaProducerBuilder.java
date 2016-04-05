@@ -1,7 +1,7 @@
 package com.ubs.kafka.producer.builder;
 
 import com.ubs.kafka.producer.SimpleProducer;
-import com.ubs.kafka.producer.builder.configuration.ServerConfiguration;
+import com.ubs.kafka.producer.builder.configuration.KafkaServerConfiguration;
 
 /**
  * Created by dkoshkin
@@ -15,8 +15,8 @@ public class KafkaProducerBuilder<K, V> {
 
     public KafkaProducerBuilder(){}
 
-    public ServerConfiguration<K, V> newProducer() {
-        return new ProducerConfiguration<K, V>();
+    public KafkaServerConfiguration<K, V> newProducer() {
+        return new ProducerConfiguration<>();
     }
 
     public SimpleProducer<K, V> newProducerFromFile(String path) {

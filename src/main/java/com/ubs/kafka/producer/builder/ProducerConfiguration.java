@@ -5,11 +5,13 @@ import com.ubs.kafka.exception.PropertiesException;
 import com.ubs.kafka.preset.KafkaAcknowledgements;
 import com.ubs.kafka.preset.KafkaSerializers;
 import com.ubs.kafka.preset.KafkaServers;
+import com.ubs.kafka.preset.ZookeeperServers;
 import com.ubs.kafka.producer.SimpleProducer;
 import com.ubs.kafka.producer.builder.configuration.*;
 import com.ubs.kafka.serializer.ObjectSerializer;
-import com.ubs.kafka.utility.CustomOption;
 import com.ubs.kafka.utility.PropertiesUtility;
+import com.ubs.kafka.utility.ZookeeperUtility;
+import kafka.utils.ZkUtils;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -23,9 +25,12 @@ import java.util.Properties;
 /**
  * Created by dkoshkin on 4/2/16.
  */
-class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>, SASLConfiguration<K, V>, SSLConfiguration<K, V>, Build<K, V>, BuildFromFile<K, V>,NestedConfiguration<K,V> {
+class ProducerConfiguration<K, V> implements KafkaServerConfiguration<K, V>, OptionalConfiguration<K, V>, CustomConfiguration<K, V>, SASLConfiguration<K, V>, SSLConfiguration<K, V>, Build<K, V>, BuildFromFile<K, V>,NestedConfiguration<K,V> {
+
+    private static final String ZOOKEEPER_SERVERS_PROPERTY = "zookeeper.servers";
 
     private String servers;
+    private String zookeeperServers;
     private Serializer<K> keySerializer;
     private Serializer<V> valueSerializer;
     private Partitioner partitioner;
@@ -95,6 +100,19 @@ class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, Optional
         return this;
     }
     /* End Required Parameters*/
+
+    @Override
+    public OptionalConfiguration<K, V> zookeeperServers(String serverList) {
+        this.zookeeperServers = serverList;
+        return this;
+    }
+
+    @Override
+    public OptionalConfiguration<K, V> zookeeperServers(ZookeeperServers serversEnum) {
+        // TODO need to call an SP/Service to get server urls
+        this.zookeeperServers = null;
+        return this;
+    }
 
     @Override
     public OptionalConfiguration<K, V> keySerializer(Serializer<K> keySerializer) {
@@ -457,11 +475,6 @@ class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, Optional
             throw new IllegalStateException(ExceptionMessages.ILLEGAL_STATE_EXCEPTION_MESSAGE_SERVER);
         }
 
-        /* Get the full class name */
-        if(partitioner != null) {
-            put(properties, "partitioner.class", partitioner.getClass().getCanonicalName());
-        }
-
         /* Add all fields to Properties */
         put(properties, "bootstrap.servers", servers);
         put(properties, "acks", acks);
@@ -511,6 +524,11 @@ class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, Optional
         put(properties, "sslKeymanagerAlgorithm", sslKeymanagerAlgorithm);
         put(properties, "sslTrustmanagerAlgorithm", sslTrustmanagerAlgorithm);
 
+        /* Get the full class name */
+        if(partitioner != null) {
+            put(properties, "partitioner.class", partitioner.getClass().getCanonicalName());
+        }
+
         /* Add custom fields to Properties */
         if(customConfigurationList != null) {
             for(CustomOption option : customConfigurationList) {
@@ -526,7 +544,13 @@ class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, Optional
             valueSerializer = (Serializer<V>) new StringSerializer();
         }
 
-        return new SimpleKafkaProducer<>(properties, keySerializer, valueSerializer);
+        /* Get Zookeeper url, optional but allows for auto topic creation if not topic does not exist */
+        ZkUtils zkUtils = null;
+        if(zookeeperServers != null) {
+            zkUtils = ZookeeperUtility.newZkUtils(zookeeperServers);
+        }
+
+        return new SimpleKafkaProducer<>(properties, keySerializer, valueSerializer, zkUtils);
     }
 
     @Override
@@ -535,13 +559,18 @@ class ProducerConfiguration<K, V> implements ServerConfiguration<K, V>, Optional
             throw new NullPointerException(ExceptionMessages.PROPERTIES_PATH_NULL);
         }
         Properties properties;
+        ZkUtils zkUtils = null;
         try {
             properties = PropertiesUtility.readPropertyFile(path);
+            String zookeeperServers = properties.getProperty(ZOOKEEPER_SERVERS_PROPERTY);
+            if(zookeeperServers != null) {
+                zkUtils = ZookeeperUtility.newZkUtils(zookeeperServers);
+            }
         } catch (IOException e) {
             throw new PropertiesException(e);
         }
 
-        return new SimpleKafkaProducer<>(properties);
+        return new SimpleKafkaProducer<>(properties, zkUtils);
     }
 
     private void put(Properties properties,  String key, Object value) {
