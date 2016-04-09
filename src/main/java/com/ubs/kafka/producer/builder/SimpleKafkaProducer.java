@@ -35,50 +35,47 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
 
     @Override
     public Future<RecordMetadata> send(ProducerRecord<K, V> record) {
-        checkTopic(getTopic(record), this.zkUtils);
         return super.send(record);
     }
 
     @Override
     public Future<RecordMetadata> send(ProducerRecord<K, V> record, Callback callback) {
-        checkTopic(getTopic(record), this.zkUtils);
         return super.send(record, callback);
     }
 
     @Override
     public Future<RecordMetadata> send(String topic, Integer partition, K key, V value) {
-        checkTopic(topic, this.zkUtils);
         return super.send(new ProducerRecord<>(topic, partition, key, value));
     }
 
     @Override
     public Future<RecordMetadata> send(String topic, K key, V value) {
-        checkTopic(topic, this.zkUtils);
         return super.send(new ProducerRecord<>(topic, key, value));
     }
 
     @Override
     public Future<RecordMetadata> send(String topic, V value) {
-        checkTopic(topic, this.zkUtils);
         return super.send(new ProducerRecord<K, V>(topic, value));
     }
 
     @Override
     public Future<RecordMetadata> send(String topic, Integer partition, K key, V value, Callback callback) {
-        checkTopic(topic, this.zkUtils);
         return super.send(new ProducerRecord<>(topic, partition, key, value), callback);
     }
 
     @Override
     public Future<RecordMetadata> send(String topic, K key, V value, Callback callback) {
-        checkTopic(topic, this.zkUtils);
         return super.send(new ProducerRecord<>(topic, key, value), callback);
     }
 
     @Override
     public Future<RecordMetadata> send(String topic, V value, Callback callback) {
-        checkTopic(topic, this.zkUtils);
         return super.send(new ProducerRecord<K, V>(topic, value), callback);
+    }
+
+    @Override
+    public Boolean createTopic(String topic) {
+        return TopicUtility.createTopicIfNotExist(topic, zkUtils);
     }
 
     @Override
@@ -93,17 +90,4 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
         ZookeeperUtility.close(this.zkUtils);
     }
 
-    private static String getTopic(ProducerRecord record) {
-        if(record != null) {
-            return record.topic();
-        }
-        return null;
-    }
-
-    private static Boolean checkTopic(String topic, ZkUtils zkUtils) {
-        if(zkUtils != null && topic != null) {
-            return TopicUtility.createTopicIfNotExist(topic, zkUtils);
-        }
-        return null;
-    }
 }

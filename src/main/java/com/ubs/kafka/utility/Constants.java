@@ -12,12 +12,13 @@ public final class Constants {
     public static final boolean ZK_IS_SECURITY_ENABLED = false;
 
     /* Topic */
-    public static final int TOPIC_PARTITIONS = 1;
-    public static final int TOPIC_REPLICATION_FACTOR = 2;
+    public static final int TOPIC_PARTITIONS = 8;
+    public static final int TOPIC_REPLICATION_FACTOR = 1;
 
     /* Logger Messages */
     public static final String LOGGER_CREATE_TOPIC_WARN = "Topic does not exist, created topic ";
-    public static final String LOGGER_TOPIC_NULL_WARN = "Topic is NULL";
-    public static final String LOGGER_ZKUTILS_NULL_WARN = "ZkUtils is NULL";
+    public static final String LOGGER_TOPIC_NULL_ERROR = "Topic cannot be NULL";
+    public static final String LOGGER_ZKUTILS_NULL_ERROR = "ZkUtils cannot NULL";
+    public static final String LOGGER_TOPIC_CREATE_WARN = "Topic was not created ";
 
 }

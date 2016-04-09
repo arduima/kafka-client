@@ -1,5 +1,6 @@
 package com.ubs.kafka.serializer;
 
+import com.ubs.kafka.KafkaClinetTest;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.junit.Test;
@@ -10,9 +11,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Created by dkoshkin on 3/28/16.
  */
-public class ObjectSerializerTest {
-
-    private static final String SOME_STRING = "TEST string";
+public class ObjectSerializerTest extends KafkaClinetTest {
 
     @Test
     public void serialize() throws Exception {

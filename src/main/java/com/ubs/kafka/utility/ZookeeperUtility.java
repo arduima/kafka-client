@@ -10,11 +10,12 @@ public class ZookeeperUtility {
     private ZookeeperUtility() {}
 
     public static ZkUtils newZkUtils(String url) {
-        return ZkUtils.apply(
+        ZkUtils zkUtils =  ZkUtils.apply(
                 url,
                 Constants.ZK_SESSION_TIMEOUT,
                 Constants.ZK_CONNECTION_TIMEOUT,
                 Constants.ZK_IS_SECURITY_ENABLED);
+        return zkUtils;
     }
 
     public static void close(ZkUtils zkUtils) {

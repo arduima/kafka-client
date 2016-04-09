@@ -1,22 +1,27 @@
-package com.ubs.kafka.producer;
+package com.ubs.kafka.producer.builder;
 
+import com.ubs.kafka.KafkaClinetTest;
 import com.ubs.kafka.exception.PropertiesException;
 import com.ubs.kafka.configenum.KafkaAcknowledgements;
 import com.ubs.kafka.configenum.KafkaSerializers;
+import com.ubs.kafka.producer.SimpleProducer;
 import com.ubs.kafka.producer.builder.KafkaProducerBuilder;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;
 
+import java.util.concurrent.Future;
+
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by dkoshkin on 3/28/16.
  */
-public class KafkaProducerBuilderTest {
+public class KafkaProducerBuilderTest extends KafkaClinetTest {
 
-    //public static final String SERVERS = "192.168.99.100:32769";
-    private final static String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
+    //private final static String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
 
     @Test
     public void newBuilder() throws Exception {
@@ -24,6 +29,8 @@ public class KafkaProducerBuilderTest {
                 .servers(SERVERS)
                 .build();
         assertNotNull(producer1);
+        Future<RecordMetadata> future1 = producer1.send(TOPIC, "newBuilder1");
+        while(!future1.isDone()){}
 
         SimpleProducer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
@@ -31,6 +38,8 @@ public class KafkaProducerBuilderTest {
                 .valueSerializer(new ByteArraySerializer())
                 .build();
         assertNotNull(producer2);
+        Future<RecordMetadata> future2 = producer1.send(TOPIC, "newBuilder2");
+        while(!future2.isDone()){}
 
         // Key & Value Serializers can be any Serializable object or byte[]
         SimpleProducer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newProducer()
@@ -48,13 +57,16 @@ public class KafkaProducerBuilderTest {
                     .and()
                 .build();
         assertNotNull(producer3);
+        Future<RecordMetadata> future3 = producer1.send(TOPIC, "newBuilder3");
+        while(!future3.isDone()){}
+    }
 
-        SimpleProducer<String, byte[]> producer4 = new KafkaProducerBuilder<String, byte[]>().newProducer()
-                .servers(SERVERS)
-                .acknowledgements(KafkaAcknowledgements.ALL)
-                .build();
-        assertNotNull(producer4);
-
+    @Test
+    public void newBuilderFromFile() {
+        SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducerFromFile(PROPERTIES_FILE);
+        assertNotNull(producer);
+        Future<RecordMetadata> future = producer.send(TOPIC, "newBuilderFromFile");
+        while(!future.isDone()){}
     }
 
     @Test(expected = NullPointerException.class)
@@ -67,5 +79,4 @@ public class KafkaProducerBuilderTest {
         SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducerFromFile("/incorrect/path/to/kafka.properties");
     }
 
-    // TODO test happy-path for newBuilderFromFile
 }
