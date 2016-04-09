@@ -75,7 +75,7 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
 
     @Override
     public Boolean createTopic(String topic) {
-        return TopicUtility.createTopicIfNotExist(topic, zkUtils);
+        return TopicUtility.createTopic(topic, zkUtils);
     }
 
     @Override

@@ -17,23 +17,23 @@ public class TopicUtility {
 
     private TopicUtility() {}
 
-    public static Boolean createTopicIfNotExist(String topic, ZkUtils zkUtils) {
+    public static Boolean createTopic(String topic, ZkUtils zkUtils) {
         Boolean topicExists = doesTopicExist(topic, zkUtils);
         Boolean topicCreated = Boolean.FALSE;
         if(!topicExists) {
             LOGGER.warning(Constants.LOGGER_CREATE_TOPIC_WARN + topic);
             AdminUtils.createTopic(zkUtils, topic, Constants.TOPIC_PARTITIONS, Constants.TOPIC_REPLICATION_FACTOR, new Properties());
 
-            topicCreated = createTopic(topic, zkUtils);
+            topicCreated = createTopicTask(topic, zkUtils);
         }
 
         return topicCreated;
     }
 
-    public static Boolean createTopicIfNotExist(String topic, String zookeeperUrl) {
+    public static Boolean createTopic(String topic, String zookeeperUrl) {
         ZkUtils zkUtils = ZookeeperUtility.newZkUtils(zookeeperUrl);
 
-        return createTopicIfNotExist(topic, zkUtils);
+        return createTopic(topic, zkUtils);
     }
 
     public static void deleteTopic(String topic, ZkUtils zkUtils) {
@@ -54,7 +54,7 @@ public class TopicUtility {
         return AdminUtils.topicExists(zkUtils, topic);
     }
 
-    private static Boolean createTopic(String topic, ZkUtils zkUtils) {
+    private static Boolean createTopicTask(String topic, ZkUtils zkUtils) {
         Boolean topicCreated;
         // Wait for topic to be created
         class CreateTopicTask implements Callable<Boolean> {

@@ -20,24 +20,24 @@ public class TopicUtilityTest extends KafkaClinetTest {
 
     @Test
     public void createTopicIfNotExist() throws Exception {
-        assertTrue(TopicUtility.createTopicIfNotExist(TOPIC_UTILITY_TOPIC, zkUtils));
-        assertFalse(TopicUtility.createTopicIfNotExist(TOPIC_UTILITY_TOPIC, zkUtils));
+        assertTrue(TopicUtility.createTopic(TOPIC_UTILITY_TOPIC, zkUtils));
+        assertFalse(TopicUtility.createTopic(TOPIC_UTILITY_TOPIC, zkUtils));
     }
 
     @Test
     public void createTopicIfNotExistURL() throws Exception {
-        assertTrue(TopicUtility.createTopicIfNotExist(TOPIC_UTILITY_TOPIC_URL, ZK_SERVERS));
-        assertFalse(TopicUtility.createTopicIfNotExist(TOPIC_UTILITY_TOPIC_URL, ZK_SERVERS));
+        assertTrue(TopicUtility.createTopic(TOPIC_UTILITY_TOPIC_URL, ZK_SERVERS));
+        assertFalse(TopicUtility.createTopic(TOPIC_UTILITY_TOPIC_URL, ZK_SERVERS));
     }
 
     @Test(expected = IllegalStateException.class)
     public void topicNull() throws Exception {
-        TopicUtility.createTopicIfNotExist(null, zkUtils);
+        TopicUtility.createTopic(null, zkUtils);
     }
 
     @Test(expected = IllegalStateException.class)
     public void topicNullUrl() throws Exception {
-        TopicUtility.createTopicIfNotExist(null, ZK_SERVERS);
+        TopicUtility.createTopic(null, ZK_SERVERS);
     }
 
 }

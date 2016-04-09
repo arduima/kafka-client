@@ -31,6 +31,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
         assertNotNull(producer1);
         Future<RecordMetadata> future1 = producer1.send(TOPIC, "newBuilder1");
         while(!future1.isDone()){}
+        producer1.close();
 
         SimpleProducer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
@@ -40,6 +41,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
         assertNotNull(producer2);
         Future<RecordMetadata> future2 = producer1.send(TOPIC, "newBuilder2");
         while(!future2.isDone()){}
+        producer2.close();
 
         // Key & Value Serializers can be any Serializable object or byte[]
         SimpleProducer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newProducer()
@@ -59,6 +61,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
         assertNotNull(producer3);
         Future<RecordMetadata> future3 = producer1.send(TOPIC, "newBuilder3");
         while(!future3.isDone()){}
+        producer3.close();
     }
 
     @Test
@@ -67,6 +70,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
         assertNotNull(producer);
         Future<RecordMetadata> future = producer.send(TOPIC, "newBuilderFromFile");
         while(!future.isDone()){}
+        producer.close();
     }
 
     @Test(expected = NullPointerException.class)

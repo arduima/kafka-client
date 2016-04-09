@@ -6,11 +6,8 @@ import com.ubs.kafka.utility.TopicUtility;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.utils.SystemTime;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Timer;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +46,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         future = producer.send(producerRecord, callback);
         while(!future.isDone()){
         }
+        producer.close();
     }
 
     @Test
@@ -56,6 +54,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         SimpleProducer<String, String> producer = newProducer();
         producer.send(TOPIC, 0, "key2_1", "value2_1");
         assertTrue(true);
+        producer.close();
     }
 
     @Test
@@ -63,6 +62,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         SimpleProducer<String, String> producer = newProducer();
         producer.send(TOPIC, "key3_1", "value3_1");
         assertTrue(true);
+        producer.close();
     }
 
     @Test
@@ -70,6 +70,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         SimpleProducer<String, String> producer = newProducer();
         producer.send(TOPIC, "value4_1");
         assertTrue(true);
+        producer.close();
     }
 
     @Test
@@ -79,7 +80,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         Future<RecordMetadata> future = producer.send(TOPIC, 0, "key5_1", "value5_1", callback);
         while(!future.isDone()){}
         assertTrue(true);
-
+        producer.close();
     }
 
     @Test
@@ -89,6 +90,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         Future<RecordMetadata> future = producer.send(TOPIC, "key6_1", "value6_1", callback);
         while(!future.isDone()){}
         assertTrue(true);
+        producer.close();
     }
 
     @Test
@@ -98,15 +100,27 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
         Future<RecordMetadata> future = producer.send(TOPIC, "value7_1", callback);
         while(!future.isDone()){}
         assertTrue(true);
+        producer.close();
     }
 
     @Test
-    public void createNewAndSend() throws Exception {
-        TopicUtility.createTopicIfNotExist(NEW_TOPIC, ZK_SERVERS);
+    public void createNewAndSend1() throws Exception {
+        TopicUtility.createTopic(NEW_TOPIC1, ZK_SERVERS);
         SimpleProducer<String, String> producer = newProducer();
-        Future<RecordMetadata> future = producer.send(NEW_TOPIC, "createNewAndSend_value");
+        Future<RecordMetadata> future = producer.send(NEW_TOPIC1, "createNewAndSend_value1");
         while(!future.isDone()){}
         assertTrue(true);
+        producer.close();
+    }
+
+    @Test
+    public void createNewAndSend2() throws Exception {
+        SimpleProducer<String, String> producer = newProducerZK();
+        producer.createTopic(NEW_TOPIC2);
+        Future<RecordMetadata> future = producer.send(NEW_TOPIC2, "createNewAndSend_value2");
+        while(!future.isDone()){}
+        assertTrue(true);
+        producer.close();
     }
 
     @Test(expected = IllegalStateException.class)
