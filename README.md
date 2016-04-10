@@ -75,7 +75,7 @@ To see a full list of all available options look at `src/test/resources/kafka-te
 ### <a name="serializers"></a>Create a Topic
 The client provides 2 ways to create a topic:
 * If `.zookeeperServers("{zookeeperhost}:{port#}")` is provided, use `producer.createTopic("my-awesome-topic");`
-* Or the more generic `TopicUtility.createTopic("{zookeeperhost}:{port#}", "{zookeeperhost}:{port#}");`
+* Or the more generic `TopicUtility.createTopic("my-awesome-topic", "{zookeeperhost}:{port#}");`
 
 ### Send a Message
 There are a multiple methods to send a message:
