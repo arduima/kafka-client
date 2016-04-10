@@ -19,7 +19,7 @@ producer.close();
 ```
 
 ### Docker Kafka Server
-For testing and development the easiest way to setup a a Kafka server is to use *docker-compose*.
+For testing and development the easiest way to setup a Kafka server is to use *docker-compose*.
 To learn how to deploy the Kafka server go to `/kafka-docker` in this repo.
 
 ---
