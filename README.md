@@ -1,7 +1,7 @@
 # Kafka Client
 ###TL;DR
 ```JAVA
-//Producer :
+//PRODUCER
 // Create a SimpleProducer to send messages to an Apache Kafka server
 // Note that because of <String, String> both the message key and value must be Strings
 SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducer()
