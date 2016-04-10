@@ -1,5 +1,5 @@
 # Kafka Client
-###TL;DR
+### TL;DR
 ```JAVA
 // PRODUCER
 // Create a SimpleProducer to send messages to an Apache Kafka server
@@ -15,8 +15,13 @@ producer.send("my-awesome-topic", "somekey", "somevalue");
 // Close the producer or use the try-with-resource statement instead
 producer.close();
 
-//Consumer TODO
+//CONSUMER TODO
 ```
+
+### Docker Kafka Server
+For testing and development the easiest way to setup a a Kafka server is to use *docker-compose*.
+To learn how to deploy the Kafka server go to `/kafka-docker` in this repo.
+
 ---
 ## Producer
 SimpleKafkaProducer is a wrapper around the [KafkaProducer](https://kafka.apache.org/090/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html) that provides an elegant builder style API for an easy setup.
