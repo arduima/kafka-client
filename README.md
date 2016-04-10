@@ -1,7 +1,7 @@
 # Kafka Client
 ###TL;DR
 ```JAVA
-//PRODUCER
+// PRODUCER
 // Create a SimpleProducer to send messages to an Apache Kafka server
 // Note that because of <String, String> both the message key and value must be Strings
 SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducer()
@@ -14,7 +14,7 @@ producer.createTopic("my-awesome-topic");
 producer.send("my-awesome-topic", "somekey", "somevalue");
 // Close the producer or use the try-with-resource statement instead
 producer.close();
-  
+
 //Consumer TODO
 ```
 ---
@@ -108,4 +108,3 @@ Where `T` is a POJO.
 **Note** all the members of the object must be Serializable. This object will be internally converted and sent as a `byte[]`
 
 You can also provide your own serializer by implementing `org.apache.kafka.common.serialization.Serializer<T>` and `org.apache.kafka.common.serialization.Deserializer<T>`. See `ObjectSerializer.java` implementation for an example.
-
