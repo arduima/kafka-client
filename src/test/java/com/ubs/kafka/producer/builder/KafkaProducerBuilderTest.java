@@ -8,6 +8,7 @@ import com.ubs.kafka.producer.SimpleProducer;
 import com.ubs.kafka.producer.builder.KafkaProducerBuilder;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
+import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
                 .valueSerializer(new ByteArraySerializer())
                 .build();
         assertNotNull(producer2);
-        Future<RecordMetadata> future2 = producer1.send(TOPIC, "newBuilder2");
+        Future<RecordMetadata> future2 = producer2.send(TOPIC, new byte[0]);
         while(!future2.isDone()){}
         producer2.close();
 
@@ -59,7 +60,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
                     .and()
                 .build();
         assertNotNull(producer3);
-        Future<RecordMetadata> future3 = producer1.send(TOPIC, "newBuilder3");
+        Future<RecordMetadata> future3 = producer3.send(TOPIC, Integer.MAX_VALUE);
         while(!future3.isDone()){}
         producer3.close();
     }

@@ -3,7 +3,7 @@
 ```JAVA
 // PRODUCER
 // Create a SimpleProducer to send messages to an Apache Kafka server
-// Note that because of <String, String> both the message key and value must be Strings
+// Note that because of <String, String> both the message key and value must be of String type
 SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducer()
         .servers("{kafkahost}:{port#}")
         .zookeeperServers("{zookeeperhost}:{port#}")
@@ -20,7 +20,8 @@ producer.close();
 
 ### Docker Kafka Server
 * For testing and development the easiest way to setup a Kafka server is to use *docker-compose*
-* To deploy make sure docker and docker-compose is installed and run `./docker/launch.sh`
+* To deploy make sure docker and docker-compose is installed and run `./docker/start.sh`.
+**Note** don't forget to change the Kakfa and ZooKeeper IPs to reflect your Kafka ip in `KafkaClientTest` and `kafka-test.properties` before running unit tests.
 * To learn more about running a Kafka server in Docker go to `/docker` in this repo
 
 ---

@@ -17,8 +17,8 @@ public class TopicUtility {
 
     private TopicUtility() {}
 
-    public static Boolean createTopic(String topic, ZkUtils zkUtils) {
-        Boolean topicExists = doesTopicExist(topic, zkUtils);
+    public static Boolean createTopic(String topic, ZkUtils zkUtils, ConcurrentHashMap<String, Long> cache) {
+        Boolean topicExists = doesTopicExist(topic, zkUtils, cache, true);
         Boolean topicCreated = Boolean.FALSE;
         if(!topicExists) {
             LOGGER.warning(Constants.LOGGER_CREATE_TOPIC_WARN + topic);
@@ -30,20 +30,29 @@ public class TopicUtility {
         return topicCreated;
     }
 
-    public static Boolean createTopic(String topic, String zookeeperUrl) {
+    public static Boolean createTopic(String topic, String zookeeperUrl, ConcurrentHashMap<String, Long> cache) {
         ZkUtils zkUtils = ZookeeperUtility.newZkUtils(zookeeperUrl);
 
-        return createTopic(topic, zkUtils);
+        return createTopic(topic, zkUtils, cache);
     }
 
-    public static void deleteTopic(String topic, ZkUtils zkUtils) {
-        Boolean topicExists = doesTopicExist(topic, zkUtils);
-        if(!topicExists) {
+
+    public static Boolean deleteTopic(String topic, ZkUtils zkUtils, ConcurrentHashMap<String, Long> cache) {
+        Boolean topicExists = doesTopicExist(topic, zkUtils, cache, false);
+        if(topicExists) {
             AdminUtils.deleteTopic(zkUtils, topic);
+            deleteTopicFromCache(topic, cache);
         }
+        return topicExists;
     }
 
-    private static Boolean doesTopicExist(String topic, ZkUtils zkUtils) {
+    public static Boolean deleteTopic(String topic, String zookeeperUrl, ConcurrentHashMap<String, Long> cache) {
+        ZkUtils zkUtils = ZookeeperUtility.newZkUtils(zookeeperUrl);
+
+        return deleteTopic(topic, zkUtils, cache);
+    }
+
+    private static Boolean doesTopicExist(String topic, ZkUtils zkUtils, ConcurrentHashMap<String, Long> cache, boolean put) {
         if(topic == null) {
             throw new IllegalStateException(Constants.LOGGER_TOPIC_NULL_ERROR);
         }
@@ -51,6 +60,10 @@ public class TopicUtility {
             throw new IllegalStateException(Constants.LOGGER_ZKUTILS_NULL_ERROR);
         }
 
+        // First check if topic in local cache, if not add now
+        if(topicExistsInCache(topic, cache, true)) {
+            return true;
+        }
         return AdminUtils.topicExists(zkUtils, topic);
     }
 
@@ -70,7 +83,7 @@ public class TopicUtility {
             public Boolean call() {
                 try {
                     // TODO find better way to see if topic is ready
-                    Thread.sleep(3000);
+                    Thread.sleep(Constants.CREATE_TOPIC_TIMEOUT);
                 } catch (InterruptedException e) {}
                 return true;
             }
@@ -93,6 +106,28 @@ public class TopicUtility {
         }
 
         return topicCreated;
+    }
+
+    // If putIfAbsent() doesn't return null, the key is in Map
+    // TODO fix error when using Map
+    private static Boolean topicExistsInCache(String topic, ConcurrentHashMap<String, Long> cache, boolean put) {
+        if(cache == null || topic == null) {
+            return false;
+        }
+        // Auto create key, value
+        if(put) {
+            return cache.putIfAbsent(topic, new Long(System.currentTimeMillis())) != null;
+        }
+        else {
+            return cache.get(topic) != null;
+        }
+    }
+
+    private static void deleteTopicFromCache(String topic, ConcurrentHashMap<String, Long> cache) {
+        if(cache == null || topic == null) {
+            return;
+        }
+        cache.remove(topic);
     }
 
 }

@@ -105,8 +105,8 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
 
     @Test
     public void createNewAndSend1() throws Exception {
-        TopicUtility.createTopic(NEW_TOPIC1, ZK_SERVERS);
         SimpleProducer<String, String> producer = newProducer();
+        TopicUtility.createTopic(NEW_TOPIC1, ZK_SERVERS, null);
         Future<RecordMetadata> future = producer.send(NEW_TOPIC1, "createNewAndSend_value1");
         while(!future.isDone()){}
         assertTrue(true);
@@ -116,7 +116,6 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
     @Test
     public void createNewAndSend2() throws Exception {
         SimpleProducer<String, String> producer = newProducerZK();
-        producer.createTopic(NEW_TOPIC2);
         Future<RecordMetadata> future = producer.send(NEW_TOPIC2, "createNewAndSend_value2");
         while(!future.isDone()){}
         assertTrue(true);
