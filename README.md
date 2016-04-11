@@ -8,8 +8,6 @@ SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, Strin
         .servers("{kafkahost}:{port#}")
         .zookeeperServers("{zookeeperhost}:{port#}")
         .build();
-// Create a topic programmatically
-producer.createTopic("my-awesome-topic");
 // Send a message to the server
 producer.send("my-awesome-topic", "somekey", "somevalue");
 // Close the producer or use the try-with-resource statement instead
@@ -36,7 +34,6 @@ SimpleProducer<K, V> producer = new KafkaProducerBuilder<K, V>().newProducer()
         .keySerializer(KafkaSerializers.STRING)
         .valueSerializer(KafkaSerializers.OBJECT)
         .build();
-producer.createTopic("my-awesome-topic");
 producer.send("my-awesome-topic", "somekey", new MyObject("Something", "Goes", "Here", 1));
 producer.close();
 ```
@@ -67,16 +64,20 @@ SimpleProducer implements the `AutoCloseable` interface, use *try-with-resources
 #### Property File Example:
 ```JAVA
 SimpleProducer<String, String> producer = new KafkaProducerBuilder<String, String>().newProducerFromFile("{path-to.properties}");
-producer.createTopic("my-awesome-topic");
 producer.send("my-awesome-topic", "somekey", "somevalue");
 producer.close();
 ```
 To see a full list of all available options look at `src/test/resources/kafka-test.properties` in this repository
 
-### <a name="serializers"></a>Create a Topic
-The client provides 2 ways to create a topic:
-* If `.zookeeperServers("{zookeeperhost}:{port#}")` is provided, use `producer.createTopic("my-awesome-topic");`
-* Or the more generic `TopicUtility.createTopic("my-awesome-topic", "{zookeeperhost}:{port#}");`
+### <a name="serializers"></a>Create/Delete a Topic
+The client automatically creates a topic if it does not exist, is also exposes a method to create it manually:
+* `TopicUtility.createTopic("my-awesome-topic", "{zookeeperhost}:{port#}");`
+
+It is possible to delete a topic by calling:
+* `producer.deleteTopic("my-awesome-topic");` or
+* `TopicUtility.deleteTopic("my-awesome-topic", "{zookeeperhost}:{port#}");`
+
+**Note** `delete.topic.enable` must be set to **true** on the Kafka server, it's default is **false**.
 
 ### Send a Message
 There are a multiple methods to send a message:
