@@ -18,7 +18,7 @@ producer.close();
 
 ### Docker Kafka Server
 * For testing and development the easiest way to setup a Kafka server is to use *docker-compose*
-* To deploy make sure docker and docker-compose is installed and run `./docker/start.sh`.
+* To deploy make sure docker and docker-compose is installed and run `./start.sh` in the `docker/` directory.
 **Note** don't forget to change the Kakfa and ZooKeeper IPs to reflect your Kafka ip in `KafkaClientTest` and `kafka-test.properties` before running unit tests.
 * To learn more about running a Kafka server in Docker go to `/docker` in this repo
 

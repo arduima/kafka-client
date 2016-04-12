@@ -1,5 +1,6 @@
 package com.ubs.kafka.utility;
 
+import com.ubs.kafka.task.CreateTopicTask;
 import kafka.admin.AdminUtils;
 import kafka.utils.ZkUtils;
 
@@ -18,6 +19,7 @@ public class TopicUtility {
     private TopicUtility() {}
 
     public static Boolean createTopic(String topic, ZkUtils zkUtils, ConcurrentHashMap<String, Long> cache) {
+        // Add the key when looking up
         Boolean topicExists = doesTopicExist(topic, zkUtils, cache, true);
         Boolean topicCreated = Boolean.FALSE;
         if(!topicExists) {
@@ -38,10 +40,11 @@ public class TopicUtility {
 
 
     public static Boolean deleteTopic(String topic, ZkUtils zkUtils, ConcurrentHashMap<String, Long> cache) {
+        // Don't add the key when looking up, trying to delete it
         Boolean topicExists = doesTopicExist(topic, zkUtils, cache, false);
         if(topicExists) {
             AdminUtils.deleteTopic(zkUtils, topic);
-            deleteTopicFromCache(topic, cache);
+            CacheUtility.deleteKey(topic, cache);
         }
         return topicExists;
     }
@@ -60,35 +63,18 @@ public class TopicUtility {
             throw new IllegalStateException(Constants.LOGGER_ZKUTILS_NULL_ERROR);
         }
 
-        // First check if topic in local cache, if not add now
-        if(topicExistsInCache(topic, cache, true)) {
+        // First check if topic in local cache, if not add it to the cache now
+        if(CacheUtility.keyExists(topic, cache, true)) {
             return true;
+        } else {
+            return AdminUtils.topicExists(zkUtils, topic);
         }
-        return AdminUtils.topicExists(zkUtils, topic);
     }
 
     private static Boolean createTopicTask(String topic, ZkUtils zkUtils) {
         Boolean topicCreated;
+
         // Wait for topic to be created
-        class CreateTopicTask implements Callable<Boolean> {
-            ZkUtils zkUtils;
-            String topic;
-
-            public CreateTopicTask(ZkUtils zkUtils, String topic) {
-                this.zkUtils = zkUtils;
-                this.topic = topic;
-            }
-
-            @Override
-            public Boolean call() {
-                try {
-                    // TODO find better way to see if topic is ready
-                    Thread.sleep(Constants.CREATE_TOPIC_TIMEOUT);
-                } catch (InterruptedException e) {}
-                return true;
-            }
-        }
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         try {
@@ -99,35 +85,9 @@ public class TopicUtility {
             LOGGER.warning(Constants.LOGGER_TOPIC_CREATE_WARN + topic);
         }
         executor.shutdown();
-        try {
-            Thread.sleep(3000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         return topicCreated;
     }
 
-    // If putIfAbsent() doesn't return null, the key is in Map
-    // TODO fix error when using Map
-    private static Boolean topicExistsInCache(String topic, ConcurrentHashMap<String, Long> cache, boolean put) {
-        if(cache == null || topic == null) {
-            return false;
-        }
-        // Auto create key, value
-        if(put) {
-            return cache.putIfAbsent(topic, new Long(System.currentTimeMillis())) != null;
-        }
-        else {
-            return cache.get(topic) != null;
-        }
-    }
-
-    private static void deleteTopicFromCache(String topic, ConcurrentHashMap<String, Long> cache) {
-        if(cache == null || topic == null) {
-            return;
-        }
-        cache.remove(topic);
-    }
 
 }

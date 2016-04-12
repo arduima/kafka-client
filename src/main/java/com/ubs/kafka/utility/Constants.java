@@ -15,7 +15,7 @@ public final class Constants {
     public static final int TOPIC_PARTITIONS = 8;
     public static final int TOPIC_REPLICATION_FACTOR = 1;
     // ms for topic to be ready after creating
-    public static final int CREATE_TOPIC_TIMEOUT = 3000;
+    public static final int CREATE_TOPIC_TIMEOUT = 1000;
 
     /* Logger Messages */
     public static final String LOGGER_CREATE_TOPIC_WARN = "Topic does not exist, created topic ";

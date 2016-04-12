@@ -2,6 +2,7 @@ package com.ubs.kafka.producer.builder;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.ubs.kafka.producer.SimpleProducer;
+import com.ubs.kafka.utility.CacheUtility;
 import com.ubs.kafka.utility.TopicUtility;
 import com.ubs.kafka.utility.ZookeeperUtility;
 import kafka.utils.ZkUtils;
@@ -29,13 +30,13 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
     SimpleKafkaProducer(Properties properties, Serializer<K> keySerializer, Serializer<V> valueSerializer, ZkUtils zkUtils) {
         super(properties, keySerializer, valueSerializer);
         this.zkUtils = zkUtils;
-        this.topicCache = newTopicMap();
+        this.topicCache = CacheUtility.newCache();
     }
 
     SimpleKafkaProducer(Properties properties, ZkUtils zkUtils) {
         super(properties);
         this.zkUtils = zkUtils;
-        this.topicCache = newTopicMap();
+        this.topicCache = CacheUtility.newCache();
     }
 
     @Override
@@ -105,10 +106,6 @@ class SimpleKafkaProducer<K, V> extends KafkaProducer<K, V> implements SimplePro
         super.close(timeout, timeUnit);
         ZookeeperUtility.close(this.zkUtils);
         cleanup();
-    }
-
-    private ConcurrentHashMap<String, Long> newTopicMap() {
-        return new ConcurrentHashMap<>();
     }
 
     private Boolean createTopicIfNotExist(String topic) {
