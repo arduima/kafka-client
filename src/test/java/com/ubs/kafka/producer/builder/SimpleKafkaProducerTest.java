@@ -1,6 +1,6 @@
 package com.ubs.kafka.producer.builder;
 
-import com.ubs.kafka.KafkaClinetTest;
+import com.ubs.kafka.KafkaClientTest;
 import com.ubs.kafka.producer.SimpleProducer;
 import com.ubs.kafka.utility.TopicUtility;
 import org.apache.kafka.clients.producer.Callback;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 /**
  * Created by dkoshkin on 4/8/16.
  */
-public class SimpleKafkaProducerTest extends KafkaClinetTest {
+public class SimpleKafkaProducerTest extends KafkaClientTest {
 
     @Test
     public void send() {
@@ -115,7 +115,7 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
 
     @Test
     public void createNewAndSend2() throws Exception {
-        SimpleProducer<String, String> producer = newProducerZK();
+        SimpleProducer<String, String> producer = newProducer();
         Future<RecordMetadata> future = producer.send(NEW_TOPIC2, "createNewAndSend_value2");
         while(!future.isDone()){}
         assertTrue(true);
@@ -174,12 +174,6 @@ public class SimpleKafkaProducerTest extends KafkaClinetTest {
     }
 
     private SimpleProducer<String, String> newProducer() {
-       return new KafkaProducerBuilder<String, String>().newProducer()
-                .servers(SERVERS)
-                .build();
-    }
-
-    private SimpleProducer<String, String> newProducerZK() {
         return new KafkaProducerBuilder<String, String>().newProducer()
                 .servers(SERVERS)
                 .zookeeperServers(ZK_SERVERS)

@@ -1,6 +1,6 @@
 package com.ubs.kafka.producer.builder;
 
-import com.ubs.kafka.KafkaClinetTest;
+import com.ubs.kafka.KafkaClientTest;
 import com.ubs.kafka.exception.PropertiesException;
 import com.ubs.kafka.configenum.KafkaAcknowledgements;
 import com.ubs.kafka.configenum.KafkaSerializers;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by dkoshkin on 3/28/16.
  */
-public class KafkaProducerBuilderTest extends KafkaClinetTest {
+public class KafkaProducerBuilderTest extends KafkaClientTest {
 
     //private final static String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
 
@@ -28,6 +28,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
     public void newBuilder() throws Exception {
         SimpleProducer<String, String> producer1 = new KafkaProducerBuilder<String, String>().newProducer()
                 .servers(SERVERS)
+                .zookeeperServers(ZK_SERVERS)
                 .build();
         assertNotNull(producer1);
         Future<RecordMetadata> future1 = producer1.send(TOPIC, "newBuilder1");
@@ -36,6 +37,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
 
         SimpleProducer<String, byte[]> producer2 = new KafkaProducerBuilder<String, byte[]>().newProducer()
                 .servers(SERVERS)
+                .zookeeperServers(ZK_SERVERS)
                 .keySerializer(new StringSerializer())
                 .valueSerializer(new ByteArraySerializer())
                 .build();
@@ -47,6 +49,7 @@ public class KafkaProducerBuilderTest extends KafkaClinetTest {
         // Key & Value Serializers can be any Serializable object or byte[]
         SimpleProducer<String, Integer> producer3 = new KafkaProducerBuilder<String, Integer>().newProducer()
                 .servers(SERVERS)
+                .zookeeperServers(ZK_SERVERS)
                 .acknowledgements("all")
                 .batchSize(16384)
                 .bufferMemory(1024)

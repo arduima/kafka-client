@@ -3,10 +3,10 @@ package com.ubs.kafka;
 /**
  * Created by dkoshkin on 4/8/16.
  */
-public class KafkaClinetTest {
+public class KafkaClientTest {
 
-    protected static final String SERVERS = "192.168.99.100:32832";
-    public static final String ZK_SERVERS = "192.168.99.100:32831";
+    protected static final String SERVERS = "172.19.36.21:9092,172.19.36.22:9092,172.19.36.23:9092,172.19.36.24:9092";
+    public static final String ZK_SERVERS = "172.19.36.21:2181,172.19.36.22:2181,172.19.36.23:2181";
     protected static final String TOPIC = "test_topic";
     protected static final String NEW_TOPIC1 = "new_test_topic1";
     protected static final String NEW_TOPIC2 = "new_test_topic2";

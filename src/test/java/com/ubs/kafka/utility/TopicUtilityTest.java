@@ -1,6 +1,6 @@
 package com.ubs.kafka.utility;
 
-import com.ubs.kafka.KafkaClinetTest;
+import com.ubs.kafka.KafkaClientTest;
 import kafka.utils.ZkUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * Created by dkoshkin on 4/9/16.
  */
-public class TopicUtilityTest extends KafkaClinetTest {
+public class TopicUtilityTest extends KafkaClientTest {
     private ZkUtils zkUtils;
     private ConcurrentHashMap<String, Long> topicCache;
 
